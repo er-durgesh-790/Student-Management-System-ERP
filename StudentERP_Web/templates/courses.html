@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Course Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            background: #1d4ed8;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button {
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            margin-right: 8px;
+            margin-top: 15px;
+        }
+
+        .add {
+            background: #16a34a;
+        }
+
+        .clear {
+            background: #6b7280;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+        }
+
+        .search {
+            background: #2563eb;
+            margin-top: 0;
+        }
+
+        .show {
+            background: #64748b;
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #6b7280;
+        }
+
+        @media(max-width: 800px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<div class="header">
+
+    <h1>📚 Course Management</h1>
+
+    <a href="/dashboard">
+        ← Dashboard
+    </a>
+
+</div>
+
+
+<div class="container">
+
+    <!-- ================= ADD COURSE ================= -->
+
+    <div class="card">
+
+        <h2>Course Details</h2>
+
+        <form action="/courses/add" method="POST">
+
+            <div class="form-grid">
+
+                <input
+                    type="text"
+                    name="course_id"
+                    placeholder="Course ID"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="course_name"
+                    placeholder="Course Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="duration"
+                    placeholder="Duration (e.g. 4 Years)"
+                >
+
+                <input
+                    type="text"
+                    name="fee"
+                    placeholder="Course Fee"
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="add"
+            >
+                ➕ Add Course
+            </button>
+
+            <button
+                type="reset"
+                class="clear"
+            >
+                🧹 Clear
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <div class="card">
+
+        <h2>🔍 Search Courses</h2>
+
+        <form
+            action="/courses"
+            method="GET"
+            class="search-box"
+        >
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Course ID / Course Name / Duration"
+            >
+
+            <button
+                type="submit"
+                class="search"
+            >
+                Search
+            </button>
+
+            <a href="/courses">
+                <button
+                    type="button"
+                    class="show"
+                >
+                    Show All
+                </button>
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= COURSE TABLE ================= -->
+
+    <div class="card">
+
+        <h2>Course Records</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Course ID</th>
+                    <th>Course Name</th>
+                    <th>Duration</th>
+                    <th>Fee</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% if courses %}
+
+                    {% for course in courses %}
+
+                    <tr>
+
+                        <td>{{ course[1] }}</td>
+
+                        <td>{{ course[2] }}</td>
+
+                        <td>{{ course[3] }}</td>
+
+                        <td>₹ {{ course[4] }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            class="empty"
+                        >
+                            No course records found.
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

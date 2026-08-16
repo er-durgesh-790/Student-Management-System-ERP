@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 25px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            background: #1d4ed8;
+            padding: 10px 18px;
+            border-radius: 7px;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.08);
+
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+
+            outline: none;
+
+            border-color: #2563eb;
+        }
+
+        .readonly {
+
+            background: #f1f5f9;
+
+            color: #475569;
+        }
+
+        .button-area {
+
+            margin-top: 22px;
+        }
+
+        button {
+
+            border: none;
+
+            padding: 11px 20px;
+
+            border-radius: 7px;
+
+            color: white;
+
+            cursor: pointer;
+
+            margin-right: 8px;
+
+            font-size: 14px;
+        }
+
+        .add {
+            background: #16a34a;
+        }
+
+        .clear {
+            background: #6b7280;
+        }
+
+        .search {
+            background: #2563eb;
+        }
+
+        .show {
+            background: #64748b;
+        }
+
+        .search-area {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+        .search-area input {
+
+            max-width: 400px;
+        }
+
+        .table-container {
+
+            overflow-x: auto;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 800px;
+        }
+
+        th {
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 13px;
+
+            text-align: center;
+        }
+
+        td {
+
+            padding: 12px;
+
+            text-align: center;
+
+            border-bottom:
+                1px solid #e5e7eb;
+        }
+
+        tr:hover {
+
+            background: #f1f5f9;
+        }
+
+        .present {
+
+            color: #15803d;
+
+            font-weight: bold;
+        }
+
+        .absent {
+
+            color: #dc2626;
+
+            font-weight: bold;
+        }
+
+        .leave {
+
+            color: #ca8a04;
+
+            font-weight: bold;
+        }
+
+        .student-status {
+
+            margin-top: 8px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        .success {
+            color: #15803d;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+
+        .message {
+
+            padding: 12px;
+
+            margin-bottom: 15px;
+
+            background: #dbeafe;
+
+            color: #1e40af;
+
+            border-radius: 7px;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+
+                flex-direction: column;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+            .container {
+
+                padding: 15px;
+            }
+
+            .search-area {
+
+                flex-direction: column;
+            }
+
+            .search-area input {
+
+                max-width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    <h1>
+        📅 Attendance Management
+    </h1>
+
+    <a
+        href="/dashboard"
+        class="back-btn"
+    >
+        ← Dashboard
+    </a>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     ATTENDANCE FORM
+===================================================== -->
+
+<div class="card">
+
+    <h2>
+        Attendance Details
+    </h2>
+
+
+    <form
+        method="POST"
+        action="/attendance/add"
+    >
+
+
+        <div class="form-grid">
+
+
+            <!-- STUDENT ID -->
+
+            <div>
+
+                <label>
+                    Student ID
+                </label>
+
+                <input
+                    type="text"
+                    id="student_id"
+                    name="student_id"
+                    placeholder="Enter Student ID"
+                    autocomplete="off"
+                    required
+                >
+
+                <div
+                    id="student_status"
+                    class="student-status"
+                ></div>
+
+            </div>
+
+
+            <!-- STUDENT NAME -->
+
+            <div>
+
+                <label>
+                    Student Name
+                </label>
+
+                <input
+                    type="text"
+                    id="student_name"
+                    name="student_name"
+                    class="readonly"
+                    placeholder="Auto-filled"
+                    readonly
+                    required
+                >
+
+            </div>
+
+
+            <!-- COURSE -->
+
+            <div>
+
+                <label>
+                    Course
+                </label>
+
+                <input
+                    type="text"
+                    id="course"
+                    name="course"
+                    class="readonly"
+                    placeholder="Auto-filled"
+                    readonly
+                    required
+                >
+
+            </div>
+
+
+            <!-- SEMESTER -->
+
+            <div>
+
+                <label>
+                    Semester
+                </label>
+
+                <input
+                    type="text"
+                    id="semester"
+                    name="semester"
+                    class="readonly"
+                    placeholder="Auto-filled"
+                    readonly
+                >
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div>
+
+                <label>
+                    Attendance Date
+                </label>
+
+                <input
+                    type="date"
+                    id="attendance_date"
+                    name="attendance_date"
+                    required
+                >
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div>
+
+                <label>
+                    Attendance Status
+                </label>
+
+                <select
+                    id="status"
+                    name="status"
+                    required
+                >
+
+                    <option value="Present">
+                        Present
+                    </option>
+
+                    <option value="Absent">
+                        Absent
+                    </option>
+
+                    <option value="Leave">
+                        Leave
+                    </option>
+
+                </select>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="button-area">
+
+            <button
+                type="submit"
+                class="add"
+                id="addButton"
+            >
+                ➕ Add Attendance
+            </button>
+
+
+            <button
+                type="reset"
+                class="clear"
+                onclick="clearStudentDetails()"
+            >
+                🧹 Clear
+            </button>
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
+<div class="card">
+
+    <h2>
+        🔍 Search Attendance
+    </h2>
+
+
+    <form
+        method="GET"
+        action="/attendance"
+    >
+
+        <div class="search-area">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Student ID / Name / Course / Date"
+                value="{{ search or '' }}"
+            >
+
+
+            <button
+                type="submit"
+                class="search"
+            >
+                Search
+            </button>
+
+
+            <a href="/attendance">
+
+                <button
+                    type="button"
+                    class="show"
+                >
+                    Show All
+                </button>
+
+            </a>
+
+        </div>
+
+    </form>
+
+
+    {% if message %}
+
+    <div class="message">
+
+        {{ message }}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- =====================================================
+     ATTENDANCE RECORDS
+===================================================== -->
+
+<div class="card">
+
+    <h2>
+        📋 Attendance Records
+    </h2>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        ID
+                    </th>
+
+                    <th>
+                        Student ID
+                    </th>
+
+                    <th>
+                        Student Name
+                    </th>
+
+                    <th>
+                        Course
+                    </th>
+
+                    <th>
+                        Date
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                    Actions
+                    </th>
+                
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for attendance in attendance_data %}
+
+                <tr>
+
+                    <td>
+                        {{ attendance[0] }}
+                    </td>
+
+                    <td>
+                        {{ attendance[1] }}
+                    </td>
+
+                    <td>
+                        {{ attendance[2] }}
+                    </td>
+
+                    <td>
+                        {{ attendance[3] }}
+                    </td>
+
+                    <td>
+                        {{ attendance[4] }}
+                    </td>
+
+                    <td>
+
+                        {% if attendance[5] == "Present" %}
+
+                            <span class="present">
+                                ✅ Present
+                            </span>
+
+                        {% elif attendance[5] == "Absent" %}
+
+                            <span class="absent">
+                                ❌ Absent
+                            </span>
+
+                        {% elif attendance[5] == "Leave" %}
+
+                            <span class="leave">
+                                🟡 Leave
+                            </span>
+
+                        {% else %}
+
+                            {{ attendance[5] }}
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+    <form
+        method="POST"
+        action="/attendance/delete/{{ attendance[0] }}"
+        onsubmit="return confirm('Delete this attendance record?');"
+        style="display:inline;"
+    >
+
+        <button
+            type="submit"
+            style="
+                background:#dc2626;
+                padding:7px 12px;
+                margin:0;
+            "
+        >
+            🗑️ Delete
+        </button>
+
+    </form>
+
+</td>
+<a
+    href="/attendance/edit/{{ attendance[0] }}"
+    style="
+        background:#2563eb;
+        color:white;
+        padding:7px 12px;
+        border-radius:5px;
+        text-decoration:none;
+        margin-right:5px;
+    "
+>
+    ✏️ Edit
+</a>
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="6">
+
+                        No attendance records found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+    const studentIdInput =
+        document.getElementById("student_id");
+
+    const studentNameInput =
+        document.getElementById("student_name");
+
+    const courseInput =
+        document.getElementById("course");
+
+    const semesterInput =
+        document.getElementById("semester");
+
+    const studentStatus =
+        document.getElementById("student_status");
+
+    const addButton =
+        document.getElementById("addButton");
+
+
+    let searchTimer = null;
+
+
+    studentIdInput.addEventListener(
+        "input",
+        function () {
+
+            const studentId =
+                this.value.trim();
+
+
+            studentNameInput.value = "";
+            courseInput.value = "";
+            semesterInput.value = "";
+
+            studentStatus.textContent = "";
+
+            studentStatus.className =
+                "student-status";
+
+
+            if (!studentId) {
+
+                addButton.disabled = false;
+
+                return;
+            }
+
+
+            clearTimeout(searchTimer);
+
+
+            searchTimer = setTimeout(
+                function () {
+
+                    fetch(
+                        "/attendance/student/"
+                        + encodeURIComponent(studentId)
+                    )
+
+                    .then(
+                        response => response.json()
+                    )
+
+                    .then(
+                        data => {
+
+                            if (data.success) {
+
+                                const fullName =
+                                    (
+                                        data.first_name
+                                        + " "
+                                        + data.last_name
+                                    ).trim();
+
+
+                                studentNameInput.value =
+                                    fullName;
+
+                                courseInput.value =
+                                    data.course;
+
+                                semesterInput.value =
+                                    data.semester;
+
+
+                                studentStatus.textContent =
+                                    "✓ Student found";
+
+                                studentStatus.className =
+                                    "student-status success";
+
+
+                                addButton.disabled =
+                                    false;
+
+                            }
+
+                            else {
+
+                                studentStatus.textContent =
+                                    "✗ Student not found";
+
+                                studentStatus.className =
+                                    "student-status error";
+
+
+                                addButton.disabled =
+                                    true;
+                            }
+
+                        }
+                    )
+
+                    .catch(
+                        function () {
+
+                            studentStatus.textContent =
+                                "✗ Unable to fetch student details";
+
+                            studentStatus.className =
+                                "student-status error";
+
+                            addButton.disabled =
+                                true;
+                        }
+                    );
+
+                },
+                400
+            );
+
+        }
+    );
+
+
+    function clearStudentDetails() {
+
+        studentNameInput.value = "";
+
+        courseInput.value = "";
+
+        semesterInput.value = "";
+
+        studentStatus.textContent = "";
+
+        studentStatus.className =
+            "student-status";
+
+        addButton.disabled = false;
+    }
+
+
+    // Today's date automatically select
+
+    const dateInput =
+        document.getElementById(
+            "attendance_date"
+        );
+
+
+    if (!dateInput.value) {
+
+        const today =
+            new Date();
+
+        const year =
+            today.getFullYear();
+
+        const month =
+            String(
+                today.getMonth() + 1
+            ).padStart(2, "0");
+
+        const day =
+            String(
+                today.getDate()
+            ).padStart(2, "0");
+
+
+        dateInput.value =
+            year + "-"
+            + month + "-"
+            + day;
+    }
+
+</script>
+
+
+</body>
+
+</html>

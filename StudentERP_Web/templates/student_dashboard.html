@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 26px;
+        }
+
+        .logout {
+            background: #dc2626;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px #0001;
+        }
+
+        .welcome h2 {
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #0001;
+        }
+
+        .card h3 {
+            color: #2563eb;
+            margin-bottom: 15px;
+        }
+
+        .info {
+            margin: 10px 0;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .empty {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        @media(max-width: 600px) {
+
+            .header {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            🎓 Student ERP
+        </h1>
+
+        <a href="/logout" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+
+    <div class="container">
+
+        <!-- WELCOME -->
+
+        <div class="welcome">
+
+            {% if student %}
+
+                <h2>
+                    Welcome, {{ student[2] }} {{ student[3] }}
+                </h2>
+
+                <p>
+                    Student ID: <strong>{{ student[1] }}</strong>
+                </p>
+
+            {% else %}
+
+                <h2>
+                    Student Dashboard
+                </h2>
+
+                <p>
+                    Student record not found.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if student %}
+
+        <!-- INFORMATION CARDS -->
+
+        <div class="cards">
+
+
+            <!-- PROFILE -->
+
+            <div class="card">
+
+                <h3>👤 My Profile</h3>
+
+                <div class="info">
+                    <span class="label">
+                        Student ID:
+                    </span>
+
+                    {{ student[1] }}
+                </div>
+
+                <div class="info">
+                    <span class="label">
+                        Name:
+                    </span>
+
+                    {{ student[2] }} {{ student[3] }}
+                </div>
+
+                <div class="info">
+                    <span class="label">
+                        Mobile:
+                    </span>
+
+                    {{ student[4] }}
+                </div>
+
+            </div>
+
+
+            <!-- COURSE -->
+
+            <div class="card">
+
+                <h3>📚 Academic Details</h3>
+
+                <div class="info">
+                    <span class="label">
+                        Course:
+                    </span>
+
+                    {{ student[5] }}
+                </div>
+
+                <div class="info">
+                    <span class="label">
+                        Semester:
+                    </span>
+
+                    {{ student[6] }}
+                </div>
+
+            </div>
+
+
+            <!-- PHOTO -->
+
+            <div class="card">
+
+                <h3>📷 Student Photo</h3>
+
+                {% if student[7] %}
+
+                    <img
+                        src="{{ student[7] }}"
+                        alt="Student Photo"
+                        style="
+                            width:120px;
+                            height:120px;
+                            object-fit:cover;
+                            border-radius:10px;
+                        "
+                    >
+
+                {% else %}
+
+                    <p>
+                        No photo available
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+
+            <h3>
+                Student information is not available.
+            </h3>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

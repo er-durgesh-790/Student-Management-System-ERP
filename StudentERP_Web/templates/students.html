@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 26px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            background: #1d4ed8;
+            padding: 10px 18px;
+            border-radius: 7px;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .button-area {
+            margin-top: 20px;
+        }
+
+        button {
+            border: none;
+            padding: 11px 20px;
+            border-radius: 7px;
+            color: white;
+            cursor: pointer;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .add {
+            background: #16a34a;
+        }
+
+        .clear {
+            background: #6b7280;
+        }
+
+        .search-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-area input {
+            max-width: 350px;
+        }
+
+        .search {
+            background: #2563eb;
+        }
+
+        .show {
+            background: #64748b;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 13px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f1f5f9;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 7px;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .search-area {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    <h1>🎓 Student Management</h1>
+
+    <a href="/dashboard"
+       class="back-btn">
+
+        ← Dashboard
+
+    </a>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     STUDENT FORM
+===================================================== -->
+
+<div class="card">
+
+    <h2>Student Details</h2>
+
+
+    <form method="POST"
+          action="/students/add">
+
+
+        <div class="form-grid">
+
+
+            <div>
+
+                <label>Student ID</label>
+
+                <input
+                    type="text"
+                    name="student_id"
+                    placeholder="Enter Student ID"
+                    required
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>First Name</label>
+
+                <input
+                    type="text"
+                    name="first_name"
+                    placeholder="Enter First Name"
+                    required
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>Last Name</label>
+
+                <input
+                    type="text"
+                    name="last_name"
+                    placeholder="Enter Last Name"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>Mobile</label>
+
+                <input
+                    type="text"
+                    name="mobile"
+                    placeholder="Enter Mobile Number"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>Course</label>
+
+                <input
+                    type="text"
+                    name="course"
+                    placeholder="Enter Course"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>Semester</label>
+
+                <input
+                    type="text"
+                    name="semester"
+                    placeholder="Enter Semester"
+                >
+
+            </div>
+
+
+        </div>
+
+
+        <div class="button-area">
+
+            <button
+                type="submit"
+                class="add">
+
+                ➕ Add Student
+
+            </button>
+
+
+            <button
+                type="reset"
+                class="clear">
+
+                🧹 Clear
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
+<div class="card">
+
+    <h2>🔍 Search Students</h2>
+
+
+    <form method="GET"
+          action="/students">
+
+
+        <div class="search-area">
+
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Student ID / Name / Mobile"
+                value="{{ search or '' }}"
+            >
+
+
+            <button
+                type="submit"
+                class="search">
+
+                Search
+
+            </button>
+
+
+            <a href="/students">
+
+                <button
+                    type="button"
+                    class="show">
+
+                    Show All
+
+                </button>
+
+            </a>
+
+
+        </div>
+
+
+    </form>
+
+
+    {% if message %}
+
+    <div class="message">
+
+        {{ message }}
+
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+
+<!-- =====================================================
+     STUDENT TABLE
+===================================================== -->
+
+<div class="card">
+
+    <h2>Student Records</h2>
+
+
+    <div class="table-container">
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>Student ID</th>
+
+                    <th>First Name</th>
+
+                    <th>Last Name</th>
+
+                    <th>Mobile</th>
+
+                    <th>Course</th>
+
+                    <th>Semester</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                {% for student in students %}
+
+
+                <tr>
+
+                    <td>
+                        {{ student[1] }}
+                    </td>
+
+                    <td>
+                        {{ student[2] }}
+                    </td>
+
+                    <td>
+                        {{ student[3] }}
+                    </td>
+
+                    <td>
+                        {{ student[4] }}
+                    </td>
+
+                    <td>
+                        {{ student[5] }}
+                    </td>
+
+                    <td>
+                        {{ student[6] }}
+                    </td>
+
+                </tr>
+
+
+                {% else %}
+
+
+                <tr>
+
+                    <td colspan="6">
+
+                        No student records found.
+
+                    </td>
+
+                </tr>
+
+
+                {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

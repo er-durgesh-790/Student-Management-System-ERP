@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Edit Exam</title>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    font-family: Arial, sans-serif;
+
+    background: #f1f5f9;
+
+}
+
+
+.container {
+
+    max-width: 800px;
+
+    margin: 50px auto;
+
+    padding: 20px;
+
+}
+
+
+.card {
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,0.08);
+
+}
+
+
+h1 {
+
+    color: #2563eb;
+
+    margin-bottom: 25px;
+
+}
+
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 18px;
+
+}
+
+
+label {
+
+    display: block;
+
+    font-weight: bold;
+
+    margin-bottom: 6px;
+
+}
+
+
+input {
+
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 7px;
+
+}
+
+
+.buttons {
+
+    margin-top: 25px;
+
+}
+
+
+button,
+a {
+
+    display: inline-block;
+
+    border: none;
+
+    text-decoration: none;
+
+    color: white;
+
+    padding: 11px 20px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.save {
+
+    background: #16a34a;
+
+}
+
+
+.back {
+
+    background: #64748b;
+
+}
+
+
+@media(max-width:700px) {
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="card">
+
+
+<h1>
+    ✏️ Edit Exam
+</h1>
+
+
+<form
+    method="POST"
+    action="/exams/update/{{ exam[0] }}">
+
+
+<div class="form-grid">
+
+
+<div>
+
+<label>
+    Exam ID
+</label>
+
+<input
+    type="text"
+    name="exam_id"
+    value="{{ exam[1] }}"
+    required
+>
+
+</div>
+
+
+<div>
+
+<label>
+    Exam Name
+</label>
+
+<input
+    type="text"
+    name="exam_name"
+    value="{{ exam[2] }}"
+    required
+>
+
+</div>
+
+
+<div>
+
+<label>
+    Course
+</label>
+
+<input
+    type="text"
+    name="course"
+    value="{{ exam[3] or '' }}"
+>
+
+</div>
+
+
+<div>
+
+<label>
+    Semester
+</label>
+
+<input
+    type="text"
+    name="semester"
+    value="{{ exam[4] or '' }}"
+>
+
+</div>
+
+
+<div>
+
+<label>
+    Exam Date
+</label>
+
+<input
+    type="date"
+    name="exam_date"
+    value="{{ exam[5] or '' }}"
+>
+
+</div>
+
+
+<div>
+
+<label>
+    Total Marks
+</label>
+
+<input
+    type="number"
+    name="total_marks"
+    value="{{ exam[6] or '' }}"
+>
+
+</div>
+
+
+</div>
+
+
+<div class="buttons">
+
+
+<button
+    type="submit"
+    class="save">
+
+    💾 Update Exam
+
+</button>
+
+
+<a
+    href="/exams"
+    class="back">
+
+    ← Back
+
+</a>
+
+
+</div>
+
+
+</form>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

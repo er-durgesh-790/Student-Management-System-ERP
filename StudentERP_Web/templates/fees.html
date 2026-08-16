@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fees Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            background: #1d4ed8;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+        }
+
+        button {
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            margin-right: 8px;
+            margin-top: 15px;
+        }
+
+        .add {
+            background: #16a34a;
+        }
+
+        .clear {
+            background: #6b7280;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+        }
+
+        .search {
+            background: #2563eb;
+            margin-top: 0;
+        }
+
+        .show {
+            background: #64748b;
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .paid {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #6b7280;
+        }
+
+        @media(max-width: 800px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<div class="header">
+
+    <h1>💳 Fees Management</h1>
+
+    <a href="/dashboard">
+        ← Dashboard
+    </a>
+
+</div>
+
+
+<div class="container">
+
+    <!-- ================= ADD FEE ================= -->
+
+    <div class="card">
+
+        <h2>Fee Details</h2>
+
+        <form action="/fees/add" method="POST">
+
+            <div class="form-grid">
+
+                <input
+                    type="text"
+                    name="student_id"
+                    placeholder="Student ID"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="student_name"
+                    placeholder="Student Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="course"
+                    placeholder="Course"
+                    required
+                >
+
+                <input
+                    type="number"
+                    name="amount"
+                    placeholder="Fee Amount (₹)"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+                <select name="status">
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Paid">
+                        Paid
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button
+                type="submit"
+                class="add"
+            >
+                ➕ Add Fee
+            </button>
+
+            <button
+                type="reset"
+                class="clear"
+            >
+                🧹 Clear
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <div class="card">
+
+        <h2>🔍 Search Fees</h2>
+
+        <form
+            action="/fees"
+            method="GET"
+            class="search-box"
+        >
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Student ID / Name / Course / Status"
+            >
+
+            <button
+                type="submit"
+                class="search"
+            >
+                Search
+            </button>
+
+            <a href="/fees">
+                <button
+                    type="button"
+                    class="show"
+                >
+                    Show All
+                </button>
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= FEE TABLE ================= -->
+
+    <div class="card">
+
+        <h2>Fee Records</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Course</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% if fees %}
+
+                    {% for fee in fees %}
+
+                    <tr>
+
+                        <td>
+                            {{ fee[1] }}
+                        </td>
+
+                        <td>
+                            {{ fee[2] }}
+                        </td>
+
+                        <td>
+                            {{ fee[3] }}
+                        </td>
+
+                        <td>
+                            ₹ {{ fee[4] }}
+                        </td>
+
+                        <td>
+
+                            {% if fee[5] == "Paid" %}
+
+                                <span class="paid">
+                                    ✓ Paid
+                                </span>
+
+                            {% else %}
+
+                                <span class="pending">
+                                    ● Pending
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="empty"
+                        >
+                            No fee records found.
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

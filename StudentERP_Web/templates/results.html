@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student ERP - Results</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 18px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 25px;
+        }
+
+        .back-btn {
+            background: #1d4ed8;
+            color: white;
+            text-decoration: none;
+
+            padding: 10px 18px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.08);
+
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+
+            outline: none;
+
+            border-color: #2563eb;
+        }
+
+        .button-area {
+            margin-top: 20px;
+        }
+
+        button {
+
+            border: none;
+
+            padding: 10px 18px;
+
+            border-radius: 7px;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            margin-right: 6px;
+        }
+
+        .add {
+            background: #16a34a;
+        }
+
+        .clear {
+            background: #64748b;
+        }
+
+        .search {
+            background: #2563eb;
+        }
+
+        .show {
+            background: #64748b;
+        }
+
+        .edit {
+            background: #f59e0b;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 7px 12px;
+
+            border-radius: 6px;
+
+            font-size: 13px;
+        }
+
+        .edit:hover {
+            background: #d97706;
+        }
+
+        .delete {
+            background: #dc2626;
+        }
+
+        .delete:hover {
+            background: #b91c1c;
+        }
+
+        .search-area {
+
+            display: flex;
+
+            gap: 10px;
+
+            align-items: center;
+        }
+
+        .search-area input {
+            max-width: 350px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 1100px;
+        }
+
+        th {
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 13px;
+
+            text-align: center;
+        }
+
+        td {
+
+            padding: 12px;
+
+            text-align: center;
+
+            border-bottom:
+                1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .actions {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 6px;
+        }
+
+        .actions form {
+            margin: 0;
+        }
+
+        .status-pass {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .status-fail {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .status-other {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .student-message {
+
+            margin-top: 7px;
+
+            font-size: 13px;
+
+            color: #64748b;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+
+                flex-direction: column;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+            .search-area {
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .search-area input {
+                max-width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<div class="header">
+
+    <h1>
+        📊 Result Management
+    </h1>
+
+    <a href="/dashboard"
+       class="back-btn">
+
+        ← Dashboard
+
+    </a>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =========================
+     ADD RESULT
+========================= -->
+
+<div class="card">
+
+    <h2>
+        ➕ Add Student Result
+    </h2>
+
+
+    <form method="POST"
+          action="/results/add">
+
+
+        <div class="form-grid">
+
+
+            <!-- STUDENT ID -->
+
+            <div>
+
+                <label>
+                    Student ID
+                </label>
+
+                <input
+                    type="text"
+                    id="student_id"
+                    name="student_id"
+                    placeholder="Enter Student ID"
+                    required
+                >
+
+                <div
+                    id="student-message"
+                    class="student-message">
+                </div>
+
+            </div>
+
+
+            <!-- STUDENT NAME -->
+
+            <div>
+
+                <label>
+                    Student Name
+                </label>
+
+                <input
+                    type="text"
+                    id="student_name"
+                    name="student_name"
+                    placeholder="Student Name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- COURSE -->
+
+            <div>
+
+                <label>
+                    Course
+                </label>
+
+                <input
+                    type="text"
+                    id="course"
+                    name="course"
+                    placeholder="Course"
+                    required
+                >
+
+            </div>
+
+
+            <!-- SUBJECT -->
+
+            <div>
+
+                <label>
+                    Subject
+                </label>
+
+                <input
+                    type="text"
+                    name="subject"
+                    placeholder="Enter Subject"
+                    required
+                >
+
+            </div>
+
+
+            <!-- MARKS -->
+
+            <div>
+
+                <label>
+                    Marks
+                </label>
+
+                <input
+                    type="number"
+                    name="marks"
+                    placeholder="Enter Marks"
+                    min="0"
+                    max="100"
+                    required
+                >
+
+            </div>
+
+
+            <!-- GRADE -->
+
+            <div>
+
+                <label>
+                    Grade
+                </label>
+
+                <select name="grade">
+
+                    <option value="">
+                        Select Grade
+                    </option>
+
+                    <option value="A+">
+                        A+
+                    </option>
+
+                    <option value="A">
+                        A
+                    </option>
+
+                    <option value="B+">
+                        B+
+                    </option>
+
+                    <option value="B">
+                        B
+                    </option>
+
+                    <option value="C">
+                        C
+                    </option>
+
+                    <option value="D">
+                        D
+                    </option>
+
+                    <option value="F">
+                        F
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PERCENTAGE -->
+
+            <div>
+
+                <label>
+                    Percentage
+                </label>
+
+                <input
+                    type="number"
+                    step="0.01"
+                    name="percentage"
+                    placeholder="Enter Percentage"
+                    min="0"
+                    max="100"
+                >
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div>
+
+                <label>
+                    Status
+                </label>
+
+                <select name="status">
+
+                    <option value="Pass">
+                        Pass
+                    </option>
+
+                    <option value="Fail">
+                        Fail
+                    </option>
+
+                </select>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="button-area">
+
+            <button
+                type="submit"
+                class="add">
+
+                ➕ Add Result
+
+            </button>
+
+
+            <button
+                type="reset"
+                class="clear">
+
+                🧹 Clear
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+<!-- =========================
+     SEARCH
+========================= -->
+
+<div class="card">
+
+    <h2>
+        🔍 Search Results
+    </h2>
+
+
+    <form method="GET"
+          action="/results">
+
+
+        <div class="search-area">
+
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Student ID / Name / Course / Subject"
+                value="{{ search or '' }}"
+            >
+
+
+            <button
+                type="submit"
+                class="search">
+
+                Search
+
+            </button>
+
+
+            <a href="/results">
+
+                <button
+                    type="button"
+                    class="show">
+
+                    Show All
+
+                </button>
+
+            </a>
+
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+<!-- =========================
+     RESULT TABLE
+========================= -->
+
+<div class="card">
+
+    <h2>
+        📋 Result Records
+    </h2>
+
+
+    <div class="table-container">
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        ID
+                    </th>
+
+                    <th>
+                        Student ID
+                    </th>
+
+                    <th>
+                        Student Name
+                    </th>
+
+                    <th>
+                        Course
+                    </th>
+
+                    <th>
+                        Subject
+                    </th>
+
+                    <th>
+                        Marks
+                    </th>
+
+                    <th>
+                        Grade
+                    </th>
+
+                    <th>
+                        Percentage
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for result in results %}
+
+
+                <tr>
+
+
+                    <td>
+                        {{ result[0] }}
+                    </td>
+
+
+                    <td>
+                        {{ result[1] }}
+                    </td>
+
+
+                    <td>
+                        {{ result[2] }}
+                    </td>
+
+
+                    <td>
+                        {{ result[3] }}
+                    </td>
+
+
+                    <td>
+                        {{ result[4] }}
+                    </td>
+
+
+                    <td>
+                        {{ result[5] }}
+                    </td>
+
+
+                    <td>
+                        {{ result[6] }}
+                    </td>
+
+
+                    <td>
+                        {{ result[7] }}
+                    </td>
+
+
+                    <td>
+
+                        {% if result[8] == "Pass" %}
+
+                            <span class="status-pass">
+                                🟢 Pass
+                            </span>
+
+                        {% elif result[8] == "Fail" %}
+
+                            <span class="status-fail">
+                                🔴 Fail
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-other">
+                                {{ result[8] }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+
+                        <div class="actions">
+
+
+                            <!-- EDIT -->
+
+                            <a
+                                href="/results/edit/{{ result[0] }}"
+                                class="edit">
+
+                                ✏️ Edit
+
+                            </a>
+
+
+                            <!-- DELETE -->
+
+                            <form
+                                method="POST"
+                                action="/results/delete/{{ result[0] }}"
+                                onsubmit="return confirm('Are you sure you want to delete this result?');">
+
+
+                                <button
+                                    type="submit"
+                                    class="delete">
+
+                                    🗑️ Delete
+
+                                </button>
+
+
+                            </form>
+
+
+                        </div>
+
+
+                    </td>
+
+
+                </tr>
+
+
+            {% else %}
+
+
+                <tr>
+
+                    <td
+                        colspan="10"
+                        style="
+                        padding:25px;
+                        color:#64748b;
+                        ">
+
+                        📭 No result records found.
+
+                    </td>
+
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<!-- =========================
+     AUTO STUDENT DETAILS
+========================= -->
+
+<script>
+
+const studentIdInput =
+    document.getElementById("student_id");
+
+const studentNameInput =
+    document.getElementById("student_name");
+
+const courseInput =
+    document.getElementById("course");
+
+const studentMessage =
+    document.getElementById("student-message");
+
+
+studentIdInput.addEventListener(
+    "blur",
+    function () {
+
+        const studentId =
+            studentIdInput.value.trim();
+
+        if (!studentId) {
+
+            return;
+
+        }
+
+
+        fetch(
+            "/results/student/" +
+            encodeURIComponent(studentId)
+        )
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            if (data.success) {
+
+                const fullName =
+                    data.first_name +
+                    " " +
+                    data.last_name;
+
+                studentNameInput.value =
+                    fullName.trim();
+
+                courseInput.value =
+                    data.course;
+
+                studentMessage.innerText =
+                    "✅ Student found";
+
+                studentMessage.style.color =
+                    "#16a34a";
+
+            }
+
+            else {
+
+                studentNameInput.value = "";
+
+                courseInput.value = "";
+
+                studentMessage.innerText =
+                    "❌ Student not found";
+
+                studentMessage.style.color =
+                    "#dc2626";
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.log(
+                "Student Search Error:",
+                error
+            );
+
+            studentMessage.innerText =
+                "Unable to load student details";
+
+            studentMessage.style.color =
+                "#dc2626";
+
+        });
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

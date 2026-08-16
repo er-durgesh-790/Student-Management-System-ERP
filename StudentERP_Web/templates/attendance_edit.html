@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Attendance</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 20px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 25px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            background: #1d4ed8;
+            padding: 10px 18px;
+            border-radius: 7px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-bottom: 25px;
+            color: #111827;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+
+            font-size: 15px;
+        }
+
+        .readonly {
+            background: #f1f5f9;
+        }
+
+        .button-area {
+            margin-top: 25px;
+        }
+
+        button {
+            border: none;
+            padding: 12px 22px;
+
+            border-radius: 7px;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            margin-right: 8px;
+        }
+
+        .save {
+            background: #16a34a;
+        }
+
+        .cancel {
+            background: #64748b;
+            text-decoration: none;
+
+            color: white;
+
+            padding: 12px 22px;
+
+            border-radius: 7px;
+
+            display: inline-block;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <h1>
+        ✏️ Edit Attendance
+    </h1>
+
+    <a
+        href="/attendance"
+        class="back-btn"
+    >
+        ← Attendance
+    </a>
+
+</div>
+
+
+<div class="container">
+
+
+    <div class="card">
+
+        <h2>
+            Update Attendance Record
+        </h2>
+
+
+        <form
+            method="POST"
+            action="/attendance/update/{{ attendance[0] }}"
+        >
+
+
+            <div class="form-grid">
+
+
+                <!-- STUDENT ID -->
+
+                <div>
+
+                    <label>
+                        Student ID
+                    </label>
+
+                    <input
+                        type="text"
+                        name="student_id"
+                        value="{{ attendance[1] }}"
+                        readonly
+                        class="readonly"
+                    >
+
+                </div>
+
+
+                <!-- STUDENT NAME -->
+
+                <div>
+
+                    <label>
+                        Student Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="student_name"
+                        value="{{ attendance[2] }}"
+                        readonly
+                        class="readonly"
+                    >
+
+                </div>
+
+
+                <!-- COURSE -->
+
+                <div>
+
+                    <label>
+                        Course
+                    </label>
+
+                    <input
+                        type="text"
+                        name="course"
+                        value="{{ attendance[3] }}"
+                        readonly
+                        class="readonly"
+                    >
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div>
+
+                    <label>
+                        Attendance Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="attendance_date"
+                        value="{{ attendance[4] }}"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div>
+
+                    <label>
+                        Attendance Status
+                    </label>
+
+                    <select
+                        name="status"
+                        required
+                    >
+
+                        <option
+                            value="Present"
+                            {% if attendance[5] == "Present" %}
+                            selected
+                            {% endif %}
+                        >
+                            Present
+                        </option>
+
+
+                        <option
+                            value="Absent"
+                            {% if attendance[5] == "Absent" %}
+                            selected
+                            {% endif %}
+                        >
+                            Absent
+                        </option>
+
+
+                        <option
+                            value="Leave"
+                            {% if attendance[5] == "Leave" %}
+                            selected
+                            {% endif %}
+                        >
+                            Leave
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="button-area">
+
+                <button
+                    type="submit"
+                    class="save"
+                >
+                    💾 Save Changes
+                </button>
+
+
+                <a
+                    href="/attendance"
+                    class="cancel"
+                >
+                    ❌ Cancel
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

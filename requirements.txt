@@ -1,0 +1,5 @@
+customtkinter
+Pillow
+tkcalendar
+Flask>=3.1,<4
+gunicorn>=23,<24
