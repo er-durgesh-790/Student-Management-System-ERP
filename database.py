@@ -127,6 +127,46 @@ class Database:
         )
         """)
 
+        # =====================================================
+        # STUDENT PORTAL CONTENT
+        # =====================================================
+
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS portal_notices(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            message TEXT NOT NULL,
+            priority TEXT DEFAULT 'Normal',
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
+
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS academic_calendar(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            event_date TEXT NOT NULL,
+            description TEXT DEFAULT ''
+        )
+        """)
+
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS social_links(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            platform TEXT NOT NULL,
+            url TEXT NOT NULL
+        )
+        """)
+
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS chairman_profile(
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            name TEXT NOT NULL,
+            title TEXT DEFAULT 'Chairman',
+            message TEXT NOT NULL
+        )
+        """)
+
         self.conn.commit()
 # =========================================================
 # STUDENT TABLE MIGRATION
@@ -2060,3 +2100,162 @@ class Database:
 
         except Exception as e:
             print("Database Close Error:", e)
+
+    # =========================================================
+    # STUDENT PORTAL CONTENT / NOTICES / CALENDAR / SOCIAL
+    # =========================================================
+
+    def get_portal_notices(self, limit=6):
+        try:
+            self.cursor.execute("""
+                SELECT id, title, message, priority, created_at
+                FROM portal_notices
+                ORDER BY id DESC
+                LIMIT ?
+            """, (limit,))
+            return self.cursor.fetchall()
+        except Exception as e:
+            print("Portal Notices Error:", e)
+            return []
+
+    def add_portal_notice(self, title, message, priority="Normal"):
+        try:
+            self.cursor.execute("""
+                INSERT INTO portal_notices(title, message, priority)
+                VALUES (?, ?, ?)
+            """, (title, message, priority))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Add Notice Error:", e)
+            return False
+
+    def delete_portal_notice(self, notice_id):
+        try:
+            self.cursor.execute(
+                "DELETE FROM portal_notices WHERE id=?",
+                (notice_id,)
+            )
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Delete Notice Error:", e)
+            return False
+
+    def get_calendar_events(self, limit=8):
+        try:
+            self.cursor.execute("""
+                SELECT id, title, event_date, description
+                FROM academic_calendar
+                ORDER BY event_date ASC, id ASC
+                LIMIT ?
+            """, (limit,))
+            return self.cursor.fetchall()
+        except Exception as e:
+            print("Calendar Error:", e)
+            return []
+
+    def add_calendar_event(self, title, event_date, description=""):
+        try:
+            self.cursor.execute("""
+                INSERT INTO academic_calendar(title, event_date, description)
+                VALUES (?, ?, ?)
+            """, (title, event_date, description))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Add Calendar Error:", e)
+            return False
+
+    def delete_calendar_event(self, event_id):
+        try:
+            self.cursor.execute(
+                "DELETE FROM academic_calendar WHERE id=?",
+                (event_id,)
+            )
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Delete Calendar Error:", e)
+            return False
+
+    def get_social_links(self):
+        try:
+            self.cursor.execute("""
+                SELECT id, platform, url
+                FROM social_links
+                ORDER BY platform ASC
+            """)
+            return self.cursor.fetchall()
+        except Exception as e:
+            print("Social Links Error:", e)
+            return []
+
+    def add_social_link(self, platform, url):
+        try:
+            self.cursor.execute(
+                "INSERT INTO social_links(platform, url) VALUES (?, ?)",
+                (platform, url)
+            )
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Add Social Link Error:", e)
+            return False
+
+    def delete_social_link(self, link_id):
+        try:
+            self.cursor.execute(
+                "DELETE FROM social_links WHERE id=?",
+                (link_id,)
+            )
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Delete Social Link Error:", e)
+            return False
+
+    def get_chairman_profile(self):
+        try:
+            self.cursor.execute("""
+                SELECT id, name, title, message
+                FROM chairman_profile
+                WHERE id=1
+            """)
+            row = self.cursor.fetchone()
+            if row:
+                return row
+            return (
+                1,
+                "Chairman",
+                "Chairman",
+                "Welcome to our Student Management System ERP. "
+                "We wish every student success in academics and career."
+            )
+        except Exception as e:
+            print("Chairman Profile Error:", e)
+            return None
+
+    def save_chairman_profile(self, name, title, message):
+        try:
+            self.cursor.execute("""
+                INSERT INTO chairman_profile(id, name, title, message)
+                VALUES (1, ?, ?, ?)
+                ON CONFLICT(id) DO UPDATE SET
+                    name=excluded.name,
+                    title=excluded.title,
+                    message=excluded.message
+            """, (name, title, message))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Save Chairman Error:", e)
+            return False
+
+    def get_student_portal_content(self):
+        return {
+            "notices": self.get_portal_notices(),
+            "calendar": self.get_calendar_events(),
+            "social_links": self.get_social_links(),
+            "chairman": self.get_chairman_profile()
+        }

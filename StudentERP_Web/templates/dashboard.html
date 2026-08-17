@@ -1,2 +1,197 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student ERP | Dashboard</title><style>:root{--blue:#2563eb;--indigo:#4f46e5;--ink:#0f172a;--muted:#64748b;--bg:#f5f7fb;--card:#fff;--line:#e5eaf2}*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}.top{height:72px;background:linear-gradient(100deg,#1747b8,#2563eb 55%,#4f46e5);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5;box-shadow:0 8px 25px #0f2f7a22}.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:13px;background:#ffffff20;display:grid;place-items:center;font-size:21px}.brand strong{font-size:19px}.brand small{display:block;color:#dbeafe;margin-top:2px}.actions{display:flex;gap:9px;align-items:center}.actions a{color:#fff;text-decoration:none;padding:10px 13px;border-radius:10px;font-size:13px;font-weight:750}.change{background:#ffffff18;border:1px solid #ffffff2d}.logout{background:#ef4444}.wrap{max-width:1400px;margin:auto;padding:30px}.hero{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:24px}.hero h1{font-size:31px;margin:0 0 7px}.hero p{margin:0;color:var(--muted)}.profile{background:#fff;border:1px solid var(--line);padding:13px 16px;border-radius:14px;min-width:210px}.profile b{display:block}.profile span{font-size:12px;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px}.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 7px 24px #0f172a08;position:relative;overflow:hidden}.stat:after{content:"";position:absolute;width:80px;height:80px;border-radius:50%;right:-28px;bottom:-32px;background:#2563eb0d}.stat .icon{font-size:24px}.stat .label{font-size:13px;color:var(--muted);margin-top:12px}.stat .num{font-size:32px;font-weight:850;margin-top:4px;color:var(--blue)}.section{font-size:18px;margin:0 0 14px}.modules{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.module{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;min-height:155px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 7px 24px #0f172a08;transition:.2s}.module:hover{transform:translateY(-3px);box-shadow:0 15px 32px #0f172a12}.module .mi{font-size:30px}.module h3{margin:14px 0 5px}.module p{color:var(--muted);font-size:12px;margin:0 0 14px}.module a{align-self:flex-start;text-decoration:none;background:#eef4ff;color:var(--blue);font-size:13px;font-weight:800;padding:9px 12px;border-radius:10px}.module a:hover{background:var(--blue);color:#fff}.footer{text-align:center;color:#94a3b8;font-size:12px;padding:30px 0 8px}@media(max-width:1000px){.stats,.modules{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.top{height:auto;min-height:70px;padding:12px 15px;align-items:flex-start}.brand strong{font-size:15px}.brand small{font-size:11px}.actions a{font-size:11px;padding:8px}.actions .change{display:none}.wrap{padding:18px 14px}.hero{display:block}.hero h1{font-size:25px}.profile{margin-top:15px}.stats,.modules{grid-template-columns:1fr}.stat{padding:18px}.module{min-height:145px}}</style></head><body><header class="top"><div class="brand"><div class="logo">🎓</div><div><strong>Student Management System ERP</strong><small>Admin Control Center</small></div></div><div class="actions"><a class="change" href="/change-password">🔐 Change Password</a><a class="logout" href="/logout">Logout</a></div></header><main class="wrap"><section class="hero"><div><h1>Good day, {{ admin_name }}</h1><p>Manage your complete academic ERP from one place.</p></div><div class="profile"><b>{{ admin_name }}</b><span>@{{ admin_username }} • Administrator</span></div></section><section class="stats"><div class="stat"><div class="icon">👨‍🎓</div><div class="label">Total Students</div><div class="num">{{ student_count }}</div></div><div class="stat"><div class="icon">👨‍🏫</div><div class="label">Total Teachers</div><div class="num">{{ teacher_count }}</div></div><div class="stat"><div class="icon">📚</div><div class="label">Total Courses</div><div class="num">{{ course_count }}</div></div><div class="stat"><div class="icon">📝</div><div class="label">Total Exams</div><div class="num">{{ exam_count }}</div></div></section><h2 class="section">Management Modules</h2><section class="modules">{% set modules=[('👨‍🎓','Students','Manage student records','/students'),('👨‍🏫','Teachers','Manage faculty records','/teachers'),('📚','Courses','Manage courses and fees','/courses'),('💳','Fees','Track student payments','/fees'),('📅','Attendance','Record daily attendance','/attendance'),('📝','Exams','Manage examinations','/exams'),('📊','Results','Manage marks and results','/results'),('📱','Student Portal','Open student portal','/student-login')] %}{% for icon,title,desc,link in modules %}<article class="module"><div><div class="mi">{{ icon }}</div><h3>{{ title }}</h3><p>{{ desc }}</p></div><a href="{{ link }}">Open {{ title }} →</a></article>{% endfor %}</section><div class="footer">Student Management System ERP • Developed by <strong>Durgesh Gupta</strong> • 2026</div></main></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1747b8">
+<title>Student ERP | Admin Dashboard</title>
+<style>
+:root{
+ --blue:#2563eb;--deep:#1747b8;--indigo:#4f46e5;--ink:#0f172a;
+ --muted:#64748b;--bg:#f4f7fb;--card:#fff;--line:#e5eaf2;--danger:#ef4444
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+body.menu-open{overflow:hidden}
+.top{
+ height:72px;background:linear-gradient(105deg,#123b98,#2563eb 55%,#4f46e5);
+ color:#fff;display:flex;align-items:center;justify-content:space-between;
+ padding:0 24px;position:sticky;top:0;z-index:20;
+ box-shadow:0 8px 28px #123b9830
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.logo{width:44px;height:44px;border-radius:14px;background:#ffffff20;border:1px solid #ffffff30;display:grid;place-items:center;font-size:22px;flex:none}
+.brand strong{display:block;font-size:18px;white-space:nowrap}
+.brand small{display:block;color:#dbeafe;font-size:11px;margin-top:2px}
+.actions{display:flex;gap:8px;align-items:center}
+.actions a{color:#fff;text-decoration:none;padding:10px 13px;border-radius:10px;font-size:12px;font-weight:800}
+.change{background:#ffffff18;border:1px solid #ffffff30}
+.logout{background:var(--danger)}
+.menu-btn{
+ display:none;border:1px solid #ffffff35;background:#ffffff18;color:#fff;
+ width:42px;height:42px;border-radius:12px;font-size:21px;cursor:pointer
+}
+.overlay{position:fixed;inset:0;background:#02061780;z-index:29;display:none}
+.overlay.show{display:block}
+.sidebar{
+ position:fixed;left:-300px;top:0;width:285px;height:100vh;background:#fff;z-index:30;
+ padding:18px;box-shadow:20px 0 50px #02061730;transition:left .25s ease;
+ display:flex;flex-direction:column
+}
+.sidebar.open{left:0}
+.side-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:15px;border-bottom:1px solid var(--line)}
+.side-brand{display:flex;align-items:center;gap:10px}
+.side-icon{width:42px;height:42px;border-radius:13px;background:#eef4ff;display:grid;place-items:center;font-size:21px}
+.side-head b{font-size:14px}
+.close{border:0;background:#f1f5f9;border-radius:10px;width:36px;height:36px;font-size:18px;cursor:pointer}
+.admin-mini{padding:17px 4px}
+.admin-avatar{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px;margin-bottom:9px}
+.admin-mini b{display:block}.admin-mini span{font-size:12px;color:var(--muted)}
+.nav{display:grid;gap:5px;overflow:auto}
+.nav a{padding:11px 12px;border-radius:11px;text-decoration:none;color:#334155;font-size:13px;font-weight:750}
+.nav a:hover{background:#eef4ff;color:#1d4ed8}
+.nav .danger{color:#dc2626}
+.side-footer{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:#94a3b8;line-height:1.5}
+
+.wrap{max-width:1400px;margin:auto;padding:26px 30px 36px}
+.hero{
+ display:flex;justify-content:space-between;gap:20px;align-items:flex-end;
+ margin-bottom:24px;padding-top:2px
+}
+.hero h1{font-size:31px;line-height:1.2;margin:0 0 7px}
+.hero p{margin:0;color:var(--muted)}
+.profile{background:#fff;border:1px solid var(--line);padding:13px 16px;border-radius:14px;min-width:220px;box-shadow:0 6px 20px #0f172a08}
+.profile b{display:block}.profile span{font-size:12px;color:var(--muted)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 7px 24px #0f172a08;position:relative;overflow:hidden}
+.stat:after{content:"";position:absolute;width:80px;height:80px;border-radius:50%;right:-28px;bottom:-32px;background:#2563eb0d}
+.stat .icon{font-size:24px}.stat .label{font-size:13px;color:var(--muted);margin-top:12px}.stat .num{font-size:32px;font-weight:850;margin-top:4px;color:var(--blue)}
+
+.section{font-size:19px;margin:0 0 14px}
+.modules{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.module{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;min-height:158px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 7px 24px #0f172a08;transition:.2s}
+.module:hover{transform:translateY(-3px);box-shadow:0 15px 32px #0f172a12}
+.module .mi{font-size:30px}.module h3{margin:14px 0 5px;font-size:18px}.module p{color:var(--muted);font-size:12px;margin:0 0 14px}
+.module a{align-self:flex-start;text-decoration:none;background:#eef4ff;color:var(--blue);font-size:13px;font-weight:800;padding:9px 12px;border-radius:10px}
+.module a:hover{background:var(--blue);color:#fff}
+.footer{text-align:center;color:#94a3b8;font-size:12px;padding:30px 0 8px}
+
+@media(max-width:1000px){
+ .stats,.modules{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+ .top{height:64px;padding:0 11px}
+ .brand strong{font-size:13px}.brand small{font-size:9px}
+ .actions{display:none}.menu-btn{display:grid;place-items:center}
+ .wrap{padding:16px 11px 28px}
+ .hero{display:block;margin-bottom:18px}
+ .hero h1{font-size:24px;line-height:1.25}
+ .profile{margin-top:14px;min-width:0}
+ .stats,.modules{grid-template-columns:1fr;gap:11px}
+ .stat{padding:17px}.module{min-height:145px;padding:18px}
+ .section{font-size:18px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div class="logo">🎓</div>
+    <div><strong>Student Management System ERP</strong><small>Admin Control Center</small></div>
+  </div>
+
+  <div class="actions">
+    <a class="change" href="/change-password">🔐 Change Password</a>
+    <a class="logout" href="/logout">Logout</a>
+  </div>
+  <button class="menu-btn" onclick="openMenu()" aria-label="Open admin menu">☰</button>
+</header>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="side-head">
+    <div class="side-brand"><div class="side-icon">🎓</div><b>Admin Control Center</b></div>
+    <button class="close" onclick="closeMenu()" aria-label="Close menu">×</button>
+  </div>
+  <div class="admin-mini">
+    <div class="admin-avatar">{{ (admin_name or 'A')[0] }}</div>
+    <b>{{ admin_name }}</b>
+    <span>@{{ admin_username }} • Administrator</span>
+  </div>
+  <nav class="nav">
+    <a href="/dashboard">🏠 Dashboard</a>
+    <a href="/students">👨‍🎓 Students</a>
+    <a href="/teachers">👨‍🏫 Teachers</a>
+    <a href="/courses">📚 Courses</a>
+    <a href="/fees">💳 Fees</a>
+    <a href="/attendance">📅 Attendance</a>
+    <a href="/exams">📝 Exams</a>
+    <a href="/results">📊 Results</a>
+    <a href="/student-login">📱 Student Portal</a>
+    <a href="/admin-content">📢 Portal Content</a>
+    <a href="/change-password">🔐 Change Password</a>
+    <a class="danger" href="/logout">🚪 Logout</a>
+  </nav>
+  <div class="side-footer">Student ERP • 2026<br>Academic • Professional • Connected</div>
+</aside>
+
+<main class="wrap">
+<section class="hero">
+  <div>
+    <h1>Good day, {{ admin_name }} 👋</h1>
+    <p>Manage your complete academic ERP from one place.</p>
+  </div>
+  <div class="profile">
+    <b>{{ admin_name }}</b>
+    <span>@{{ admin_username }} • Administrator</span>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat"><div class="icon">👨‍🎓</div><div class="label">Total Students</div><div class="num">{{ student_count }}</div></div>
+  <div class="stat"><div class="icon">👨‍🏫</div><div class="label">Total Teachers</div><div class="num">{{ teacher_count }}</div></div>
+  <div class="stat"><div class="icon">📚</div><div class="label">Total Courses</div><div class="num">{{ course_count }}</div></div>
+  <div class="stat"><div class="icon">📝</div><div class="label">Total Exams</div><div class="num">{{ exam_count }}</div></div>
+</section>
+
+<h2 class="section">Management Modules</h2>
+<section class="modules">
+{% set modules=[
+('👨‍🎓','Students','Manage student records','/students'),
+('👨‍🏫','Teachers','Manage faculty records','/teachers'),
+('📚','Courses','Manage courses and fees','/courses'),
+('💳','Fees','Track student payments','/fees'),
+('📅','Attendance','Record daily attendance','/attendance'),
+('📝','Exams','Manage examinations','/exams'),
+('📊','Results','Manage marks and results','/results'),
+('📱','Student Portal','Open student portal','/student-login'),
+('📢','Portal Content','Notices, calendar, chairman & social','/admin-content')
+] %}
+{% for icon,title,desc,link in modules %}
+<article class="module">
+  <div><div class="mi">{{ icon }}</div><h3>{{ title }}</h3><p>{{ desc }}</p></div>
+  <a href="{{ link }}">Open {{ title }} →</a>
+</article>
+{% endfor %}
+</section>
+
+<div class="footer">Student Management System ERP • Developed by <strong>Durgesh Gupta</strong> • 2026</div>
+</main>
+
+<script>
+function openMenu(){
+ document.getElementById('sidebar').classList.add('open');
+ document.getElementById('overlay').classList.add('show');
+ document.body.classList.add('menu-open');
+}
+function closeMenu(){
+ document.getElementById('sidebar').classList.remove('open');
+ document.getElementById('overlay').classList.remove('show');
+ document.body.classList.remove('menu-open');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+</script>
+</body>
+</html>

@@ -1466,6 +1466,114 @@ def delete_result(result_id):
 
 
 # =========================================================
+# PORTAL CONTENT MANAGEMENT
+# =========================================================
+
+@app.route("/admin-content")
+def admin_content():
+    if not admin_required():
+        return redirect("/")
+
+    database = get_database()
+    content = database.get_student_portal_content()
+
+    return render_template(
+        "admin_content.html",
+        notices=content["notices"],
+        calendar=content["calendar"],
+        social_links=content["social_links"],
+        chairman=content["chairman"],
+        admin_name=session.get("admin_name", "Admin")
+    )
+
+
+@app.route("/admin-content/notice", methods=["POST"])
+def admin_add_notice():
+    if not admin_required():
+        return redirect("/")
+
+    title = request.form.get("title", "").strip()
+    message = request.form.get("message", "").strip()
+    priority = request.form.get("priority", "Normal").strip()
+
+    if title and message:
+        get_database().add_portal_notice(title, message, priority)
+
+    return redirect("/admin-content")
+
+
+@app.route("/admin-content/notice/delete/<int:notice_id>", methods=["POST"])
+def admin_delete_notice(notice_id):
+    if not admin_required():
+        return redirect("/")
+
+    get_database().delete_portal_notice(notice_id)
+    return redirect("/admin-content")
+
+
+@app.route("/admin-content/calendar", methods=["POST"])
+def admin_add_calendar():
+    if not admin_required():
+        return redirect("/")
+
+    title = request.form.get("title", "").strip()
+    event_date = request.form.get("event_date", "").strip()
+    description = request.form.get("description", "").strip()
+
+    if title and event_date:
+        get_database().add_calendar_event(title, event_date, description)
+
+    return redirect("/admin-content")
+
+
+@app.route("/admin-content/calendar/delete/<int:event_id>", methods=["POST"])
+def admin_delete_calendar(event_id):
+    if not admin_required():
+        return redirect("/")
+
+    get_database().delete_calendar_event(event_id)
+    return redirect("/admin-content")
+
+
+@app.route("/admin-content/social", methods=["POST"])
+def admin_add_social():
+    if not admin_required():
+        return redirect("/")
+
+    platform = request.form.get("platform", "").strip()
+    url = request.form.get("url", "").strip()
+
+    if platform and url:
+        get_database().add_social_link(platform, url)
+
+    return redirect("/admin-content")
+
+
+@app.route("/admin-content/social/delete/<int:link_id>", methods=["POST"])
+def admin_delete_social(link_id):
+    if not admin_required():
+        return redirect("/")
+
+    get_database().delete_social_link(link_id)
+    return redirect("/admin-content")
+
+
+@app.route("/admin-content/chairman", methods=["POST"])
+def admin_save_chairman():
+    if not admin_required():
+        return redirect("/")
+
+    name = request.form.get("name", "").strip()
+    title = request.form.get("title", "Chairman").strip()
+    message = request.form.get("message", "").strip()
+
+    if name and message:
+        get_database().save_chairman_profile(name, title, message)
+
+    return redirect("/admin-content")
+
+
+# =========================================================
 # STUDENT PORTAL LOGIN PAGE
 # =========================================================
 
@@ -1585,6 +1693,7 @@ def student_dashboard():
         )
 
     student = dashboard_data["student"]
+    portal_content = database.get_student_portal_content()
 
     return render_template(
         "student_dashboard.html",
@@ -1621,7 +1730,11 @@ def student_dashboard():
 
         exam_count=dashboard_data[
             "exam_count"
-        ]
+        ],
+        notices=portal_content["notices"],
+        calendar=portal_content["calendar"],
+        social_links=portal_content["social_links"],
+        chairman=portal_content["chairman"]
     )
 
 

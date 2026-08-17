@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student ERP | Portal Content</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f5f7fb;color:#0f172a}
+.top{background:linear-gradient(105deg,#123b98,#2563eb,#4f46e5);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}.top b{font-size:17px}.top a{color:#fff;text-decoration:none;background:#ffffff18;border:1px solid #ffffff30;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:800}
+.wrap{max-width:1250px;margin:auto;padding:22px 16px 40px}.hero{margin-bottom:18px}.hero h1{margin:0 0 5px}.hero p{margin:0;color:#64748b;font-size:13px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.card{background:#fff;border:1px solid #e5eaf2;border-radius:18px;padding:19px;box-shadow:0 8px 25px #0f172a08}.card.full{grid-column:1/-1}.card h2{font-size:17px;margin:0 0 15px}.form{display:grid;gap:10px}.form input,.form textarea,.form select{width:100%;padding:11px 12px;border:1px solid #dbe3ef;border-radius:10px;font:inherit;font-size:13px}.form textarea{min-height:100px;resize:vertical}.btn{border:0;border-radius:10px;background:#2563eb;color:#fff;padding:11px 14px;font-weight:800;cursor:pointer}.btn.red{background:#ef4444}.item{border-top:1px solid #eef2f7;padding:11px 0;display:flex;justify-content:space-between;gap:12px;align-items:start}.item b{font-size:13px}.item p{margin:4px 0;color:#64748b;font-size:12px;line-height:1.5}.delete{border:0;background:#fff1f2;color:#dc2626;padding:7px 9px;border-radius:8px;font-weight:800;cursor:pointer;font-size:11px;white-space:nowrap}.muted{color:#94a3b8;font-size:12px}
+@media(max-width:750px){.grid{grid-template-columns:1fr}.card.full{grid-column:auto}.top b{font-size:14px}.wrap{padding:15px 10px}}
+</style></head>
+<body>
+<header class="top"><b>🎓 Student ERP • Portal Content</b><a href="/dashboard">← Dashboard</a></header>
+<main class="wrap">
+<section class="hero"><h1>Portal Management</h1><p>Manage the notices, chairman message, academic calendar and social links visible to students.</p></section>
+<section class="grid">
+<article class="card"><h2>📢 Add Student Notice</h2><form class="form" method="post" action="/admin-content/notice">
+<input name="title" placeholder="Notice title" required><textarea name="message" placeholder="Write the message..." required></textarea>
+<select name="priority"><option>Normal</option><option>High</option><option>Urgent</option></select><button class="btn">Publish Notice</button></form>
+<h2 style="margin-top:22px">Current Notices</h2>
+{% for n in notices %}<div class="item"><div><b>{{n[1]}}</b><p>{{n[2]}}</p></div><form method="post" action="/admin-content/notice/delete/{{n[0]}}"><button class="delete">Delete</button></form></div>{% else %}<div class="muted">No notices.</div>{% endfor %}
+</article>
+<article class="card"><h2>👨‍💼 Chairman Profile & Message</h2><form class="form" method="post" action="/admin-content/chairman">
+<input name="name" value="{{chairman[1] if chairman else ''}}" placeholder="Chairman name" required>
+<input name="title" value="{{chairman[2] if chairman else 'Chairman'}}" placeholder="Designation">
+<textarea name="message" placeholder="Chairman's message..." required>{{chairman[3] if chairman else ''}}</textarea>
+<button class="btn">Save Chairman Message</button></form></article>
+<article class="card"><h2>🗓 Add Academic Calendar Event</h2><form class="form" method="post" action="/admin-content/calendar">
+<input name="title" placeholder="Event / Exam / Holiday title" required><input type="date" name="event_date" required>
+<textarea name="description" placeholder="Short description"></textarea><button class="btn">Add Calendar Event</button></form>
+<h2 style="margin-top:22px">Upcoming Events</h2>
+{% for e in calendar %}<div class="item"><div><b>{{e[1]}}</b><p>{{e[2]}}{% if e[3] %} • {{e[3]}}{% endif %}</p></div><form method="post" action="/admin-content/calendar/delete/{{e[0]}}"><button class="delete">Delete</button></form></div>{% else %}<div class="muted">No calendar events.</div>{% endfor %}
+</article>
+<article class="card"><h2>🌐 Social Media Links</h2><form class="form" method="post" action="/admin-content/social">
+<input name="platform" placeholder="Platform e.g. Instagram" required><input type="url" name="url" placeholder="https://..." required>
+<button class="btn">Add Social Link</button></form>
+<h2 style="margin-top:22px">Active Links</h2>
+{% for s in social_links %}<div class="item"><div><b>{{s[1]}}</b><p>{{s[2]}}</p></div><form method="post" action="/admin-content/social/delete/{{s[0]}}"><button class="delete">Delete</button></form></div>{% else %}<div class="muted">No social links.</div>{% endfor %}
+</article>
+</section>
+</main></body></html>

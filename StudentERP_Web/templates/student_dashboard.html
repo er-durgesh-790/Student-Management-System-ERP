@@ -1,1 +1,162 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student ERP | Student Dashboard</title><style>:root{--blue:#2563eb;--indigo:#4f46e5;--ink:#0f172a;--muted:#64748b;--bg:#f5f7fb}*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}.top{background:linear-gradient(100deg,#1d4ed8,#4f46e5);color:#fff;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:4;box-shadow:0 8px 24px #1e3a8a20}.brand{display:flex;gap:10px;align-items:center}.logo{width:42px;height:42px;background:#ffffff20;border-radius:13px;display:grid;place-items:center;font-size:21px}.brand strong{font-size:17px}.brand small{display:block;color:#dbeafe;font-size:11px}.actions{display:flex;gap:8px}.actions a{color:#fff;text-decoration:none;padding:9px 11px;border-radius:9px;font-size:12px;font-weight:800}.pass{background:#ffffff18;border:1px solid #ffffff2d}.out{background:#ef4444}.wrap{max-width:1200px;margin:auto;padding:22px 16px}.welcome{background:linear-gradient(135deg,#fff,#f8fbff);border:1px solid #e5eaf2;border-radius:20px;padding:23px;margin-bottom:18px;box-shadow:0 8px 25px #0f172a08}.welcome h1{margin:0 0 5px;font-size:27px}.welcome p{margin:0;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{background:#fff;border:1px solid #e5eaf2;border-radius:17px;padding:19px;box-shadow:0 7px 22px #0f172a08}.card h3{margin:0 0 13px;color:#334155}.row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:13px}.row:last-child{border-bottom:0}.label{color:var(--muted);font-weight:600}.value{font-weight:800;text-align:right}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}.quick a{background:#fff;border:1px solid #e5eaf2;border-radius:15px;padding:15px;text-decoration:none;color:#0f172a;font-weight:800;font-size:13px}.quick span{display:block;font-size:22px;margin-bottom:8px}.footer{text-align:center;color:#94a3b8;font-size:12px;padding:25px 0 5px}@media(max-width:850px){.grid{grid-template-columns:1fr 1fr}.quick{grid-template-columns:1fr 1fr}}@media(max-width:560px){.top{align-items:flex-start}.brand strong{font-size:14px}.brand small{font-size:10px}.actions .pass{display:block}.wrap{padding:15px 12px}.welcome h1{font-size:23px}.grid,.quick{grid-template-columns:1fr}.card{padding:17px}}</style></head><body><header class="top"><div class="brand"><div class="logo">🎓</div><div><strong>Student Management System ERP</strong><small>Student Portal</small></div></div><div class="actions"><a class="pass" href="/student-change-password">🔐 Password</a><a class="out" href="/student-logout">Logout</a></div></header><main class="wrap"><section class="welcome">{% if student %}<h1>Welcome, {{ student[2] }} {{ student[3] }} 👋</h1><p>Student ID: <strong>{{ student[1] }}</strong> • Your academic dashboard</p>{% else %}<h1>Student Dashboard</h1><p>Student record not found.</p>{% endif %}</section>{% if student %}<section class="grid"><article class="card"><h3>👤 My Profile</h3><div class="row"><span class="label">Student ID</span><span class="value">{{ student[1] }}</span></div><div class="row"><span class="label">Name</span><span class="value">{{ student[2] }} {{ student[3] }}</span></div><div class="row"><span class="label">Mobile</span><span class="value">{{ student[4] }}</span></div></article><article class="card"><h3>📚 Academic</h3><div class="row"><span class="label">Course</span><span class="value">{{ student[5] }}</span></div><div class="row"><span class="label">Semester</span><span class="value">{{ student[6] }}</span></div></article><article class="card"><h3>📊 Overview</h3><div class="row"><span class="label">Results</span><span class="value">{{ result_count }}</span></div><div class="row"><span class="label">Fees Records</span><span class="value">{{ fee_count }}</span></div><div class="row"><span class="label">Exams</span><span class="value">{{ exam_count }}</span></div></article></section><section class="quick"><a href="/student-profile"><span>👤</span>Profile</a><a href="/student-attendance"><span>📅</span>Attendance</a><a href="/student-results"><span>📊</span>Results</a><a href="/student-fees"><span>💳</span>Fees</a><a href="/student-exams"><span>📝</span>Exams</a></section><div class="footer">Student ERP • Developed by <strong>Durgesh Gupta</strong> • 2026</div>{% else %}<div class="card">Student information is not available.</div>{% endif %}</main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1747b8">
+<title>Student ERP | {{ student[2] }} {{ student[3] }}</title>
+<style>
+:root{--blue:#2563eb;--deep:#1747b8;--indigo:#4f46e5;--ink:#0f172a;--muted:#64748b;--bg:#f4f7fb;--card:#fff;--line:#e7ebf3;--green:#16a34a;--red:#ef4444;--amber:#d97706}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.top{height:70px;background:linear-gradient(105deg,#123b98,#2563eb 55%,#4f46e5);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:20;box-shadow:0 8px 28px #123b9830}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{width:43px;height:43px;border-radius:14px;background:#ffffff20;border:1px solid #ffffff30;display:grid;place-items:center;font-size:22px;flex:none}.brand strong{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{display:block;color:#dbeafe;font-size:11px;margin-top:2px}
+.menu-btn{border:1px solid #ffffff35;background:#ffffff18;color:#fff;width:43px;height:43px;border-radius:13px;font-size:21px;cursor:pointer;display:grid;place-items:center}.desktop-actions{display:flex;gap:8px}.desktop-actions a{color:#fff;text-decoration:none;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:800}.pass{background:#ffffff18;border:1px solid #ffffff2d}.out{background:#ef4444}
+.overlay{position:fixed;inset:0;background:#02061780;z-index:29;display:none}.overlay.show{display:block}
+.sidebar{position:fixed;top:0;left:-310px;width:285px;height:100vh;background:#fff;z-index:30;box-shadow:20px 0 50px #02061730;transition:left .25s ease;padding:18px;display:flex;flex-direction:column}.sidebar.open{left:0}.side-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:15px;border-bottom:1px solid var(--line)}.side-brand{display:flex;gap:10px;align-items:center}.side-icon{width:42px;height:42px;border-radius:13px;background:#eef4ff;display:grid;place-items:center;font-size:21px}.side-head b{font-size:15px}.close{border:0;background:#f1f5f9;border-radius:10px;width:36px;height:36px;font-size:18px;cursor:pointer}.student-mini{padding:17px 4px}.avatar{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:900;margin-bottom:10px}.student-mini b{display:block}.student-mini span{font-size:12px;color:var(--muted)}.nav{display:grid;gap:6px;overflow:auto}.nav a{padding:12px 13px;border-radius:11px;text-decoration:none;color:#334155;font-weight:750;font-size:13px}.nav a:hover{background:#eef4ff;color:#1d4ed8}.nav .danger{color:#dc2626}.side-footer{margin-top:auto;padding-top:15px;border-top:1px solid var(--line);font-size:11px;color:#94a3b8}
+.wrap{max-width:1250px;margin:auto;padding:20px 16px 35px}.welcome{background:linear-gradient(135deg,#fff,#f6f9ff);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 10px 30px #0f172a08;margin-bottom:16px;position:relative;overflow:hidden}.welcome:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-70px;top:-80px;background:#2563eb12}.eyebrow{font-size:11px;color:#2563eb;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.welcome h1{margin:5px 0 6px;font-size:27px}.welcome p{margin:0;color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 7px 24px #0f172a08}.card h3{margin:0 0 13px;font-size:16px}.row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px}.row:last-child{border-bottom:0}.label{color:var(--muted);font-weight:650}.value{font-weight:850;text-align:right}.section-title{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:22px 0 10px}.section-title h2{font-size:19px;margin:0}.section-title span{font-size:12px;color:var(--muted)}
+.quick{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}.quick a{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;text-decoration:none;color:#0f172a;font-weight:800;font-size:12px;box-shadow:0 5px 18px #0f172a06;transition:transform .15s}.quick a:hover{transform:translateY(-2px);border-color:#bfdbfe}.quick span{display:block;font-size:22px;margin-bottom:8px}
+.portal-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.notice{padding:13px 0;border-bottom:1px solid #eef2f7}.notice:last-child{border-bottom:0}.notice-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.notice b{font-size:13px}.badge{font-size:10px;font-weight:900;padding:4px 7px;border-radius:999px;background:#eff6ff;color:#2563eb}.badge.High{background:#fff1f2;color:#dc2626}.badge.Urgent{background:#fef2f2;color:#b91c1c}.notice p{font-size:12px;color:#64748b;line-height:1.55;margin:7px 0 0}.calendar-item{display:grid;grid-template-columns:58px 1fr;gap:11px;padding:11px 0;border-bottom:1px solid #eef2f7}.calendar-item:last-child{border-bottom:0}.datebox{background:#eef4ff;color:#1d4ed8;border-radius:12px;text-align:center;padding:8px 3px;font-weight:900;font-size:11px}.calendar-item b{font-size:13px}.calendar-item p{margin:4px 0 0;color:#64748b;font-size:11px;line-height:1.4}
+.chairman{display:flex;gap:15px;align-items:flex-start}.chair-avatar{width:62px;height:62px;border-radius:18px;background:linear-gradient(135deg,#172554,#2563eb);color:#fff;display:grid;place-items:center;font-size:27px;flex:none}.chairman h3{margin:0 0 2px}.chairman .role{font-size:11px;color:#2563eb;font-weight:800}.chairman p{font-size:13px;color:#475569;line-height:1.6;margin:10px 0 0}
+.socials{display:flex;flex-wrap:wrap;gap:8px}.social{padding:9px 12px;border-radius:11px;text-decoration:none;background:#f8fafc;color:#1e293b;border:1px solid #e2e8f0;font-size:12px;font-weight:800}.social:hover{background:#eef4ff;color:#1d4ed8}
+.footer{text-align:center;color:#94a3b8;font-size:11px;padding:24px 0 0}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.quick{grid-template-columns:repeat(3,1fr)}.portal-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.top{height:64px;padding:0 11px}.brand strong{font-size:13px}.brand small{font-size:9px}.desktop-actions{display:none}.menu-btn{width:40px;height:40px}.wrap{padding:12px 10px 25px}.welcome{padding:18px;border-radius:18px}.welcome h1{font-size:22px}.grid,.quick{grid-template-columns:1fr}.quick a{padding:14px}.card{padding:16px}.section-title{margin-top:18px}.portal-grid{gap:10px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div class="logo">🎓</div>
+    <div><strong>Student Management System ERP</strong><small>Student Portal</small></div>
+  </div>
+  <button class="menu-btn" onclick="openMenu()" aria-label="Open menu">☰</button>
+  <div class="desktop-actions">
+    <a class="pass" href="/student-change-password">🔐 Password</a>
+    <a class="out" href="/student-logout">Logout</a>
+  </div>
+</header>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="side-head">
+    <div class="side-brand"><div class="side-icon">🎓</div><b>Student Portal</b></div>
+    <button class="close" onclick="closeMenu()">×</button>
+  </div>
+  <div class="student-mini">
+    <div class="avatar">{{ (student[2] or 'S')[0] }}{{ (student[3] or '')[:1] }}</div>
+    <b>{{ student[2] }} {{ student[3] }}</b>
+    <span>{{ student[1] }} • {{ student[5] }}</span>
+  </div>
+  <nav class="nav">
+    <a href="/student-dashboard">🏠 Dashboard</a>
+    <a href="/student-profile">👤 My Profile</a>
+    <a href="/student-attendance">📅 Attendance</a>
+    <a href="/student-results">📊 Results</a>
+    <a href="/student-fees">💳 Fees</a>
+    <a href="/student-exams">📝 Exams</a>
+    <a href="#calendar" onclick="closeMenu()">🗓 Academic Calendar</a>
+    <a href="#notices" onclick="closeMenu()">📢 Notices</a>
+    <a href="/student-change-password">🔐 Change Password</a>
+    <a class="danger" href="/student-logout">🚪 Logout</a>
+  </nav>
+  <div class="side-footer">Student ERP • 2026<br>Academic • Professional • Connected</div>
+</aside>
+
+<main class="wrap">
+  <section class="welcome">
+    <div class="eyebrow">Student Dashboard</div>
+    <h1>Welcome, {{ student[2] }} {{ student[3] }} 👋</h1>
+    <p>Student ID: <strong>{{ student[1] }}</strong> &nbsp;•&nbsp; {{ student[5] }} &nbsp;•&nbsp; Semester {{ student[6] }}</p>
+  </section>
+
+  <section class="grid">
+    <article class="card"><h3>👤 My Profile</h3>
+      <div class="row"><span class="label">Student ID</span><span class="value">{{ student[1] }}</span></div>
+      <div class="row"><span class="label">Name</span><span class="value">{{ student[2] }} {{ student[3] }}</span></div>
+      <div class="row"><span class="label">Mobile</span><span class="value">{{ student[4] or '—' }}</span></div>
+    </article>
+    <article class="card"><h3>📚 Academic</h3>
+      <div class="row"><span class="label">Course</span><span class="value">{{ student[5] or '—' }}</span></div>
+      <div class="row"><span class="label">Semester</span><span class="value">{{ student[6] or '—' }}</span></div>
+    </article>
+    <article class="card"><h3>📊 Overview</h3>
+      <div class="row"><span class="label">Results</span><span class="value">{{ result_count }}</span></div>
+      <div class="row"><span class="label">Fees Records</span><span class="value">{{ fee_count }}</span></div>
+      <div class="row"><span class="label">Exams</span><span class="value">{{ exam_count }}</span></div>
+    </article>
+  </section>
+
+  <div class="section-title"><h2>Quick Access</h2><span>Everything you need in one place</span></div>
+  <section class="quick">
+    <a href="/student-profile"><span>👤</span>Profile</a>
+    <a href="/student-attendance"><span>📅</span>Attendance</a>
+    <a href="/student-results"><span>📊</span>Results</a>
+    <a href="/student-fees"><span>💳</span>Fees</a>
+    <a href="/student-exams"><span>📝</span>Exams</a>
+  </section>
+
+  <div class="section-title" id="notices"><h2>📢 Notices & Messages</h2><span>Latest updates from administration</span></div>
+  <section class="portal-grid">
+    <article class="card">
+      {% if notices %}
+        {% for n in notices %}
+        <div class="notice">
+          <div class="notice-top"><b>{{ n[1] }}</b><span class="badge {{ n[3] }}">{{ n[3] }}</span></div>
+          <p>{{ n[2] }}</p>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="muted">No new notices at the moment. Please check again later.</p>
+      {% endif %}
+    </article>
+
+    <article class="card" id="calendar">
+      <h3>🗓 Academic Calendar</h3>
+      {% if calendar %}
+        {% for event in calendar %}
+        <div class="calendar-item">
+          <div class="datebox">{{ event[2] }}</div>
+          <div><b>{{ event[1] }}</b><p>{{ event[3] }}</p></div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="muted">Academic calendar updates will appear here.</p>
+      {% endif %}
+    </article>
+  </section>
+
+  <div class="section-title"><h2>👨‍💼 Chairman's Message</h2><span>Institutional message</span></div>
+  <section class="card chairman">
+    <div class="chair-avatar">👨‍💼</div>
+    <div>
+      {% if chairman %}
+        <h3>{{ chairman[1] }}</h3><div class="role">{{ chairman[2] }}</div>
+        <p>{{ chairman[3] }}</p>
+      {% else %}
+        <h3>Chairman's Office</h3><p>Welcome to our Student ERP. We wish every student success in academics and career.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <div class="section-title"><h2>🌐 Connect With Us</h2><span>Official social media</span></div>
+  <section class="card">
+    <div class="socials">
+      {% if social_links %}
+        {% for s in social_links %}
+          <a class="social" href="{{ s[2] }}" target="_blank" rel="noopener noreferrer">↗ {{ s[1] }}</a>
+        {% endfor %}
+      {% else %}
+        <span class="muted">Social media links will appear here.</span>
+      {% endif %}
+    </div>
+  </section>
+
+  <div class="footer">Student Management System ERP • Developed by <strong>Durgesh Gupta</strong> • 2026</div>
+</main>
+<script>
+function openMenu(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlay').classList.add('show')}
+function closeMenu(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()})
+</script>
+</body>
+</html>
