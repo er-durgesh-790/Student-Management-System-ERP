@@ -6,7 +6,8 @@ from flask import (
     render_template,
     request,
     redirect,
-    session
+    session,
+    url_for
 )
 
 # =========================================================
@@ -130,6 +131,13 @@ def login():
 
             session["admin_username"] = username
 
+            admin_profile = database.get_admin(username)
+            session["admin_name"] = (
+                admin_profile[1]
+                if admin_profile and admin_profile[1]
+                else "Durgesh Gupta"
+            )
+
             return redirect("/dashboard")
 
         return render_template(
@@ -186,13 +194,84 @@ def dashboard():
     course_count = database.count_courses()
     exam_count = database.count_exams()
 
+    admin_name = session.get(
+        "admin_name",
+        "Durgesh Gupta"
+    )
+
     return render_template(
         "dashboard.html",
         student_count=student_count,
         teacher_count=teacher_count,
         course_count=course_count,
-        exam_count=exam_count
+        exam_count=exam_count,
+        admin_name=admin_name,
+        admin_username=session.get("admin_username", "admin")
     )
+
+
+# =========================================================
+# ADMIN CHANGE PASSWORD
+# =========================================================
+
+@app.route("/change-password")
+def change_password_page():
+
+    if not admin_required():
+        return redirect("/")
+
+    return render_template(
+        "admin_change_password.html",
+        admin_name=session.get("admin_name", "Durgesh Gupta"),
+        admin_username=session.get("admin_username", "admin")
+    )
+
+
+@app.route("/change-password", methods=["POST"])
+def change_password():
+
+    if not admin_required():
+        return redirect("/")
+
+    username = session.get("admin_username")
+    old_password = request.form.get("old_password", "").strip()
+    new_password = request.form.get("new_password", "").strip()
+    confirm_password = request.form.get("confirm_password", "").strip()
+
+    page_data = {
+        "admin_name": session.get("admin_name", "Durgesh Gupta"),
+        "admin_username": username
+    }
+
+    if not old_password or not new_password or not confirm_password:
+        page_data["error"] = "Please fill all password fields."
+        return render_template("admin_change_password.html", **page_data)
+
+    if new_password != confirm_password:
+        page_data["error"] = "New passwords do not match."
+        return render_template("admin_change_password.html", **page_data)
+
+    if len(new_password) < 6:
+        page_data["error"] = "New password must contain at least 6 characters."
+        return render_template("admin_change_password.html", **page_data)
+
+    if new_password == old_password:
+        page_data["error"] = "New password must be different from the current password."
+        return render_template("admin_change_password.html", **page_data)
+
+    database = get_database()
+    success = database.change_password(
+        username,
+        old_password,
+        new_password
+    )
+
+    if not success:
+        page_data["error"] = "Current password is incorrect."
+        return render_template("admin_change_password.html", **page_data)
+
+    page_data["success"] = "Password changed successfully."
+    return render_template("admin_change_password.html", **page_data)
 
 
 # =========================================================

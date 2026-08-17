@@ -221,7 +221,7 @@ class Database:
                     )
                     VALUES(?,?,?,?)
                 """, (
-                    "System Administrator",
+                    "Durgesh Gupta",
                     "admin",
                     "",
                     "admin123"
@@ -229,6 +229,14 @@ class Database:
 
                 self.conn.commit()
                 print("Default admin created.")
+
+            elif admin[1] in (None, "", "System Administrator"):
+                self.cursor.execute("""
+                    UPDATE admins
+                    SET full_name=?
+                    WHERE username=?
+                """, ("Durgesh Gupta", "admin"))
+                self.conn.commit()
 
         except Exception as e:
             print("Default Admin Error:", e)
@@ -245,6 +253,20 @@ class Database:
             WHERE username=?
             AND password=?
         """, (username, password))
+
+        return self.cursor.fetchone()
+
+    # =========================================================
+    # GET ADMIN PROFILE
+    # =========================================================
+
+    def get_admin(self, username):
+
+        self.cursor.execute("""
+            SELECT id, full_name, username, mobile
+            FROM admins
+            WHERE username=?
+        """, (username,))
 
         return self.cursor.fetchone()
 

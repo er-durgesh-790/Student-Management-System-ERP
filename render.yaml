@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: student-management-system-erp
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn StudentERP_Web.aap:app
+    healthCheckPath: /health
